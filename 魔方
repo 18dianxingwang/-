@@ -1,0 +1,72 @@
+//魔方程序
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+
+//数据结构：
+typedef enum colors
+{blue=1,red,yellow,green,white,orange}Colors;//6种颜色
+
+typedef struct surface
+{
+Colors s[4][4];
+}Surface;//每个面有3*3个小格，从下标1开始表示，每一面的颜色是固定的
+
+typedef struct cube
+{
+Surface up,down,front,back,left,right;
+}Cube;//魔方的6个面
+
+typedef struct snode
+{
+char *chbuf;
+int times;
+struct snode *next;
+}SNode;
+
+typedef struct sequence
+{
+SNode *head;//存储魔方转换序列
+int num;//魔方转换的次数
+}Sequence;
+
+Sequence CD;
+
+//程序：
+void SaveChBuf(char *sur,int i)//将cb序列存入chbuf中
+{
+char *str;
+int len=strlen(sur);
+SNode *p,*q;
+if(i%4)
+{
+str=(char *)malloc(sizeof(char)*(len+2));
+if(!str)
+{
+printf("内存不足!\n");
+exit(0);
+}
+strcpy(str,sur);
+q=(SNode *)malloc(sizeof(SNode));
+if(!q)
+{
+printf("内存不足!\n");
+exit(0);
+}
+q->chbuf=str;
+q->times=i;
+q->next=NULL;
+if(CD.head==NULL)
+{
+CD.head=q;
+CD.num++;
+}
+else
+{
+for(p=CD.head;p->next;p=p->next);
+if(!strcmp(p->chbuf,q->chbuf))
+{
+p->times=(p->times+q->times)%4;
+free(q->chbuf);free(q);
+if(!(p->tim
